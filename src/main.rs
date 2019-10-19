@@ -1,6 +1,7 @@
-// use std::io;
+use std::io;
 use rand::Rng;
 use std::cmp::Ordering;
+use std::io::prelude::*;
 
 fn main() {
     let secret_number = rand::thread_rng().gen_range(1, 101);
@@ -10,12 +11,20 @@ fn main() {
 
     loop {
         let mut guess = String::new();
-        println!(">");
-        std::io::stdin().read_line(&mut guess)
+        print!("> ");
+        io::stdout().flush().expect("WA WA");
+        io::stdin().read_line(&mut guess)
             .expect("Failed to read line");
 
-        let guess: u32 = guess.trim().parse()
-            .expect("Please type a number, that didn't count");
+        // let guess: u32 = guess.trim().parse()
+        //     .expect("Please type a number, that didn't count");
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(err) => {
+                println!("invalid number: {}", err);
+                continue;
+            }
+        };
 
         println!("You guessed: {}", guess);
 
